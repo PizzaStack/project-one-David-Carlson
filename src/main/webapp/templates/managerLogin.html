@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zion &trade;</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/matrix.css">
+    <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/manager.css">
+
+    <script type='text/javascript' src='../js/site.js' defer></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous" defer></script>
+    <script type="text/javascript" src='../js/matrix3.js' defer></script>
+</head>
+
+<body onload="onLoad('red');">
+    <canvas id='matrix-canvas' width='600px' height='400px'></canvas>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Zion&trade;</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Managers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+          </ul>
+          <!-- <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form> -->
+        </div>
+      </nav>
+
+    <div class="container">   
+        <!-- Row 1 Login card -->
+        <div class="row">
+            <div class="col-6 col-sm-12 mx-auto grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Red Pill &mdash; Manager Login</h5>
+                        <p class="card-text">
+                            <form action="" method='get'>
+                                <div class='form-group row'>
+                                    <label class='col-3 col-form-label mr-auto' for="username-input">Username</label>
+                                    <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
+                                    <div class="col-9">
+                                        <input type="text" class="form-control" id="username-input" aria-describedby="username-help">
+                                        <small id="username-help" class="form-text text-muted">"The great Morpheus; we meet at last."</small>
+                                    </div>    
+                                </div>
+                                <div class='form-group row'>
+                                    <label class='col-3 col-form-label' for="password-input">Password</label>
+                                    <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
+                                    <div class="col-9">
+                                        <input type="password" class="form-control" id="password-input" aria-describedby="password-help">
+                                        <small id="password-help" class="form-text text-muted">"Cousin, protect the security of your shit."</small>
+                                    </div>  
+                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Blue Pill</h5>
+                <p class="card-text">
+                    <blockquote>
+                        <p>I know what you're thinking, 'cause right now I'm thinking the same thing. Actually, I've been thinking it ever since I got here. Why, oh why didn't I take the blue pill?</p>
+                        <footer class=>&mdash; Cypher</footer>                            
+                    </blockquote>
+                </p>
+                <a href="https://www.netflix.com" class="card-link">Card link</a>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- <section id="submission">
+        <div class="container">
+            <h1>Enter something</h1>
+            <form action="FanficServlet" method="POST">
+                <input type="number" name="id">
+                <input type="text" name="title">
+                <input type="textarea" name="body">
+                <button></button>
+            </form>
+        </div>
+    </section> -->
+        
+
+    <!-- https://medium.freecodecamp.org/canmaking-it-rain-code-matrix-style-ec6e1386084e -->
+    <!-- <canvas id='matrix-canvas' width='600px' height='400px'></canvas> -->
+    <!-- <script src="js/matrix.js"></script> -->
+    <!-- <img id=”logo” width=”400px;” src=”https://s3.amazonaws.com/freecodecamp/freecodecamp_logo.svg"/> -->
+		
+</body>
+</html>

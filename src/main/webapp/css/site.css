@@ -1,0 +1,94 @@
+/* Main Document styles */
+
+@font-face {
+    font-family: 'Matrix';
+    src: url('fonts/matrix.woff2') format('woff2'),
+        url('fonts/matrix.woff') format('woff'),    /* Modern Browsers */
+        url('fonts/matrix.tff') format('truetype'); /* Safari, Android, iOS */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: #0b0d11; 
+    background: #0b0d11; 
+    /* background: #312737; */
+    color: #777;
+    /* opacity: 0.5; */
+    /* color: #1ec503;
+    color: #008F11;
+    color: #00660c;
+    color: #6c757d; */
+}
+
+h1, h2, h3, h4, h5, h6, footer {
+    color: #888;
+}
+p {
+    color: #777;
+}
+
+div {
+    display: block;
+}
+
+.content-wrapper {
+    background: #0b0d11;
+    margin-left: 247px;
+    min-height: 100vh;
+    padding: 1.5rem 1.7rem;
+    transition: width 0.25s ease, margin 0.25s ease;
+    width: calc(100% - 247px);
+    
+}
+
+/* Bootstrap */
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #312737;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    margin-top: 1em;
+}
+
+.card-img-top {
+    width: 100%;
+}
+
+/* nav */
+.navbar {
+    background: #000;
+    border-bottom: thin solid #350023;
+    padding: 0 8px 0 8px;
+}
+
+.navbar .navbar-brand {
+    background: #191c20;
+    /* background: #312737; */
+    /* background: #270e13; */
+    font-family: 'Matrix', Helvetica, sans-serif;
+    font-size: 2.5em;
+    text-align: center;
+    line-height: 1;
+    padding: 2px 10px 2px 18px;
+    margin-left: -8px;
+    /* font-family: matrix; */
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(53,0,35, 0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    /* stroke='rgba(0,102,12, 0.9)' */
+    /* stroke='rgba(53,0,35, 0.9)' */
+}
+.navbar-dark .navbar-toggler {
+    border-color: #350023;
+}
+
+
+
+
