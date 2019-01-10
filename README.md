@@ -1,4 +1,4 @@
-# Expense Reimbursement System (ERS) 
+# Materials and Travel Reimbursement Inventory Exchange (MATRIX)
 
 ## User stories:
 - An Employee can login
@@ -20,7 +20,7 @@
 - A Manager can view images of the receipts from reimbursement requests
 - A Manager can view all resolved requests from all employees and see which manager resolved it
 - A Manager can view all Employees
-- A Manager can view reimbursement requests from a single Employee 
+- A Manager can view reimbursement requests from a single Employee
 
 ## Technologies:
 - Java 1.8
