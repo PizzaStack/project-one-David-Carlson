@@ -378,6 +378,9 @@ out/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
+src/main/webapp/.idea/*
+src/main/webapp/.idea
+
 # JIRA plugin
 atlassian-ide-plugin.xml
 

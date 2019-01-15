@@ -1,14 +1,12 @@
 "use strict";
 
 window.addEventListener("load", function () {
-    console.log("on load");
     function sendData() {
         var XHR = new XMLHttpRequest();
 
         // Bind the FormData object and the form element
         var FD = new FormData(form);
-        for (var p of FD)
-            console.log(p + " is there");
+        console.log("Data: " + FD.toString());
 
         // Define what happens on successful data submission
         XHR.addEventListener("load", function(event) {
@@ -20,14 +18,8 @@ window.addEventListener("load", function () {
             alert('Oops! Something went wrong.');
         });
 
-        XHR.onreadystatechange = function(){
-            if(this.readyState === 4 && this.status === 200){
-                alert("SUCCESS");
-            }
-        }
-
         // Set up our request
-        XHR.open("POST", "hello");
+        XHR.open("POST", "http://localhost:8080/servlet-demo/hello");
 
         // The data sent is what the user provided in the form
         XHR.send(FD);
@@ -38,7 +30,6 @@ window.addEventListener("load", function () {
 
     // ...and take over its submit event.
     form.addEventListener("submit", function (event) {
-        console.log("On submit");
         event.preventDefault();
 
         sendData();
