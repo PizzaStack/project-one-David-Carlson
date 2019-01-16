@@ -21,14 +21,4 @@
     <param-name>user</param-name>
     <param-value>Padawan</param-value>
   </context-param>
-  <servlet>
-    <description></description>
-    <display-name>DatabaseMetaServlet</display-name>
-    <servlet-name>DatabaseMetaServlet</servlet-name>
-    <servlet-class>com.revature.servlets.DatabaseMetaServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DatabaseMetaServlet</servlet-name>
-    <url-pattern>/DatabaseMetaServlet</url-pattern>
-  </servlet-mapping>
 </web-app>

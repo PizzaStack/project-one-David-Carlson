@@ -11,7 +11,7 @@
 
     <script type='text/javascript' src='js/site.js' defer></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
-    <script type='text/javascript' src="js/loginUser.js" defer></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous" defer></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous" defer></script>
@@ -31,10 +31,10 @@
               <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Employees</a>
+              <a class="nav-link" href="./templates/employeeLogin.html">Employees</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Managers</a>
+                <a class="nav-link" href="./templates/managerLogin.html">Managers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
@@ -47,13 +47,64 @@
         </div>
     </nav>
 
+    <div class="container">
+        <!-- Row 1 quote -->
+        <div class="row">
+            <div class="col-md-6 col-sm-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Wake up</h4>
+                        <p class="card-text">
+                            <blockquote>
+                        <p>You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland and I show you how deep the rabbit-hole goes.</p>
+                        <footer class=>&mdash; Morpheus</footer>
+                        </blockquote>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2 pictures -->
+        <div class="row py-3">
+            <!-- Red Pill -->
+            <div class="col-md-3 col-sm-6 order-md-0 order-sm-2 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="./templates/managerLogin.html">
+                            <img class="card-img-top" src="img/redpill.png"></img>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Morpheus -->
+            <div class="col-md-6 col-sm-12 order-md-0 order-sm-1 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <img class="card-img-top" src="img/morpheus.jpg"></img>
+                    </div>
+                </div>
+            </div>
+            <!-- Blue Pill -->
+            <div class="col-md-3 col-sm-6 order-md-0 order-sm-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="https://www.netflix.com">
+                            <img class="card-img-top" src="img/bluepill.png"></img>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container"> 
         <!-- Row 1 quote -->
         <div class="row">
             <div class="col-md-6 col-sm-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title text-center">Now then</h4>
+                        <h4 class="card-title text-center">Get some</h4>
                         <p class="card-text">
                             <section id="form1">
                                 <div class="container">
@@ -74,9 +125,9 @@
             <div class="col-md-6 col-sm-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title text-center">Do Add</h4>
+                        <h4 class="card-title text-center">Post 1</h4>
                         <p class="card-text">
-                            <form action="hellos/add" method="post">
+                            <form action="hello" method="post">
                                 Enter Name:<input type="text" name="name"/><br/><br/>
                                 Enter Price:<input type="text" name="price"/><br/><br/>
                                 <input type="submit" value="Login"/>
@@ -136,6 +187,6 @@
     <!-- <canvas id='matrix-canvas' width='600px' height='400px'></canvas> -->
     <!-- <script src="js/matrix.js"></script> -->
     <!-- <img id=”logo” width=”400px;” src=”https://s3.amazonaws.com/freecodecamp/freecodecamp_logo.svg"/> -->
-		
+    <script type='text/javascript' src="js/loginUser.js" defer></script>
 </body>
 </html>

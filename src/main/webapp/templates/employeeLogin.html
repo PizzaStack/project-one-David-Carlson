@@ -27,14 +27,14 @@
         </button>      
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Home</a>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Employees</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Managers <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Managers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
@@ -53,9 +53,9 @@
             <div class="col-6 col-sm-12 mx-auto grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Red Pill &mdash; Manager Login</h5>
+                        <h5 class="card-title">Blue Pill &mdash; Employee Login</h5>
                         <p class="card-text">
-                            <form id="manager-login">
+                            <form action="" method='get'>
                                 <div class='form-group row'>
                                     <label class='col-3 col-form-label mr-auto' for="username-input">Username</label>
                                     <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
@@ -70,7 +70,6 @@
                                     <div class="col-9">
                                         <input type="password" class="form-control" id="password-input" aria-describedby="password-help">
                                         <small id="password-help" class="form-text text-muted">"Cousin, protect the security of your shit."</small>
-                                        <div id='password-warning' class="alert alert-danger d-none"><strong>Whoops!</strong> You entered incorrect information!</div>
                                     </div>  
                                 </div>
                                 <button type="submit" class="btn btn-primary">Login</button>

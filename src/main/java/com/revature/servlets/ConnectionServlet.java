@@ -96,31 +96,20 @@ public class ConnectionServlet extends HttpServlet {
 		}
 	}
 	
-	@GET
-	@Path("/recreate")
-	public void recreateDatabase() throws SQLException {
+	public static void recreateDatabase() throws SQLException {
 		String[] dropStatements = { 
 				"drop table IF EXISTS reimbursement_items;",
 				"drop table IF EXISTS reimbursements;", 
-				"drop table IF EXISTS managers;",
 				"drop table IF EXISTS employees;"};
 
 		String[] createStatements = { 
 				"create table employees ("
 				+ "id serial primary key, "
+				+ "is_manager boolean not NULL, "
 				+ "username varchar(50) unique, "
 				+ "password varchar(50),"
 				+ "firstname varchar(50), "
-				+ "lastname varchar(50), "
-				+ "social varchar(9));",
-				
-				"create table managers ("
-				+ "id serial primary key, "
-				+ "username varchar(50) unique, "
-				+ "password varchar(50),"
-				+ "firstname varchar(50), "
-				+ "lastname varchar(50), "
-				+ "social varchar(9));",				
+				+ "lastname varchar(50)); ",		
 
 				"create table reimbursements (" 
 				+ "id serial primary key, " 
@@ -151,9 +140,7 @@ public class ConnectionServlet extends HttpServlet {
 		}		
 	}
 	
-	@GET
-	@Path("/fill")
-	public void fillDatabase() throws UnsupportedOperationException {
+	public static void fillDatabase() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("fillDatabase not written");
 	}
 	
@@ -163,8 +150,19 @@ public class ConnectionServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String path = request.getContextPath();
+		System.out.println(path + " is connection Path");
+		switch(path) {
+		case "/recreate":
+			recreateDatabase();
+			break;
+		case "/fill":
+			fillDatabase();
+			break;
+		default:
+			System.out.println("Unrecognized connection path");
+		}
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

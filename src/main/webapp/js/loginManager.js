@@ -11,18 +11,26 @@ window.addEventListener("load", function () {
             console.log(p + " is there");
 
         // Define what happens on successful data submission
-        XHR.addEventListener("load", function(event) {
-            alert(event.target.responseText);
-        });
+        // XHR.addEventListener("load", function(event) {
+        //     alert(event.target.responseText);
+        // });
 
         // Define what happens in case of error
-        XHR.addEventListener("error", function(event) {
-            alert('Oops! Something went wrong.');
-        });
+        // XHR.addEventListener("error", function(event) {
+        //     alert('Oops! Something went wrong.');
+        //     this.error
+        // });
 
         XHR.onreadystatechange = function(){
-            if(this.readyState === 4 && this.status === 200){
-                alert("SUCCESS");
+            switch (this.readyState){
+                case 4:
+                    if (this.status === 200)
+                        alert(this.responseText);
+                    else if (this.status >= 400 || this.status < 500) {
+                        var alert = document.getElementById('password-warning');
+                        alert.classList.remove('d-none');
+                    }
+                    break;
             }
         };
 
