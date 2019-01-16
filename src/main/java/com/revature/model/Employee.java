@@ -23,6 +23,9 @@ public class Employee implements Serializable {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+	public Employee(Boolean isManager, String username, String password, String firstName, String lastName) {
+		this(-1, isManager, username, password, firstName, lastName);
+	}
 	public Employee(ResultSet rs) throws SQLException {
 		this.id = rs.getInt("id");
 		this.is_manager = rs.getBoolean("is_manager");

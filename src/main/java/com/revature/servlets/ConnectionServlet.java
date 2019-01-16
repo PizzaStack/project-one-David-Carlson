@@ -4,11 +4,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -22,8 +25,13 @@ import javax.ws.rs.Path;
 
 import org.apache.log4j.Logger;
 
+import com.revature.dao.EmployeeDao;
+import com.revature.model.Employee;
 
-@WebServlet(value="/database", loadOnStartup=1)
+
+
+//@WebServlet(value="/database", loadOnStartup=1)
+@WebServlet(name = "Database", urlPatterns = {"/database", "/database/recreate", "/database/fill", "/database/fill/*"}, loadOnStartup=1)
 public class ConnectionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -94,6 +102,18 @@ public class ConnectionServlet extends HttpServlet {
 		catch(SQLException e) {
 			System.out.println("Error closing connection: " + e.toString());
 		}
+		// https://stackoverflow.com/questions/3320400/to-prevent-a-memory-leak-the-jdbc-driver-has-been-forcibly-unregistered
+        // This manually deregisters JDBC driver, which prevents Tomcat 7 from complaining about memory leaks wr/to this class
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+                System.out.println(String.format("deregistering jdbc driver: %s", driver));
+            } catch (SQLException e) {
+                System.out.println(String.format("Error deregistering driver %s", driver));
+            }
+        }
 	}
 	
 	public static void recreateDatabase() throws SQLException {
@@ -110,7 +130,7 @@ public class ConnectionServlet extends HttpServlet {
 				+ "username varchar(50) unique, "
 				+ "password varchar(50) not NULL,"
 				+ "firstname varchar(50) not NULL, "
-				+ "lastname varchar(50) not NULL); ",		
+				+ "lastname varchar(50) not NULL);",		
 
 				"create table reimbursements (" 
 				+ "id serial primary key, " 
@@ -123,16 +143,27 @@ public class ConnectionServlet extends HttpServlet {
 				+ "id serial primary key, " 
 				+ "req_id serial references reimbursements(id), "
 				+ "item_name varchar(50) not NULL,"
-				+ "item_price real not NULL));",
+				+ "item_price real not NULL);",
 				};
 		try (Statement statement = connection.createStatement()) {
+			
 			for (String drop : dropStatements) {
-				statement.executeUpdate(drop);
+				try {
+					statement.executeUpdate(drop);
+				}
+				catch(SQLException e) {
+					System.out.println(String.format("Can't drop: %s \n %s", drop, e.toString()));
+				}				
 			}
 			for (String create : createStatements) {
-				statement.executeUpdate(create);
+				try {
+					statement.executeUpdate(create);
+				}
+				catch(SQLException e) {
+					System.out.println(String.format("Can't Create: %s \n %s", create, e.toString()));
+				}
 			}
-			System.err.println("Created databases");
+			System.out.println("Created databases");
 		} 
 		catch (Exception e) {
 			System.err.println("Problem recreating databases");
@@ -144,30 +175,70 @@ public class ConnectionServlet extends HttpServlet {
 		throw new UnsupportedOperationException("fillDatabase not written");
 	}	
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String path = request.getContextPath();
-		System.out.println(path + " is connection Path");
+		System.out.println("Conn doGet started");
+
+		String servletPath = request.getServletPath();
+		PrintWriter out = response.getWriter();
+		out.append("Served at: ").append(request.getContextPath());
+
+		System.out.println(servletPath + " is servletPath");
 		try {
-			switch(path) {
-			case "/recreate":
+			switch(servletPath) {
+			case "/database/recreate":
 				recreateDatabase();
+				out.append("did recreate");
 				break;
-			case "/fill":
+			case "/database/fill":
 				fillDatabase();
+				out.append("did fill");
 				break;
 			default:
 				System.out.println("Unrecognized connection path");
 			}
 		}
 		catch(SQLException e) {
-			System.out.println("Error doing " + path + " " + e.toString());
-		}		
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
+			System.out.println("Error doing " + servletPath + " " + e.toString());
+		}			
 	}
-
+	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		System.out.println("Conn doPost started");
+
+		String servletPath = request.getServletPath();
+		String extra = request.getPathInfo();
+		PrintWriter out = response.getWriter();
+		out.append("Served at: ").append(servletPath+extra);
+		
+		System.out.println(servletPath + " is servletPath");
+		System.out.println(extra + " is extra");
+		switch(servletPath + extra) {
+//		case "/database/recreate":
+//			recreateDatabase();
+//			out.append("no recreate");
+//			break;
+		case "/database/fill/employee":
+			addEmployee(request, response);
+			break;
+		default:
+			System.out.println("Unrecognized connection path");
+		}	
+	}
+	
+	protected void addEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		Boolean is_manager = Boolean.parseBoolean(request.getParameter("is_manager"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		System.out.println(String.format("%s %s %s %s %s", is_manager, username, password, firstName, lastName));
+		Employee employee = new Employee(is_manager, username, password, firstName, lastName);
+		if (!EmployeeDao.addEmployee(employee))
+			System.out.println(employee.getUsername() + " wasn't added");
+		else				
+			response.getWriter().append("did fill " + employee.toString());
 	}
 
 }

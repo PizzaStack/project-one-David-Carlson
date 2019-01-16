@@ -11,7 +11,24 @@ import com.revature.model.Employee;
 import com.revature.servlets.ConnectionServlet;
 
 public class EmployeeDao {
-	
+	public static List<Employee> getAllEmployees() {
+		List<Employee> employees = new ArrayList<Employee>();
+		Connection conn = ConnectionServlet.getConnection();
+		String sql = "select * from employees where is_manager is FALSE;";
+		
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					employees.add(new Employee(resultSet));					
+				}			
+			}
+		}
+		catch (SQLException e) {
+			System.out.println("SQLError in getEmployee" + e.toString());
+			return null;
+		}
+		return employees;
+	}
 	public static Employee getEmployee(String username, String password) {
 		Connection conn = ConnectionServlet.getConnection();
 		String sql = "select * from employees where username=? AND password=?";
@@ -73,24 +90,28 @@ public class EmployeeDao {
 		return false;
 	}
 	
-	public static List<Employee> getAllEmployees() {
-		List<Employee> employees = new ArrayList<Employee>();
+	public static Boolean addEmployee(Employee employee) {
 		Connection conn = ConnectionServlet.getConnection();
-		String sql = "select * from employees where is_manager is FALSE;";
-		
+		String sql = "insert into employees (is_manager, username, password, firstname, lastname) "
+				+ "values (?, ?, ?, ?, ?);";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
-			try (ResultSet resultSet = statement.executeQuery()) {
-				while (resultSet.next()) {
-					employees.add(new Employee(resultSet));					
-				}			
-			}
+			statement.setBoolean(1, employee.getIsManager());
+			statement.setString(2, employee.getUsername());
+			statement.setString(3, employee.getPassword());
+			statement.setString(4, employee.getFirstName());
+			statement.setString(5, employee.getLastName());
+			
+			if (statement.executeUpdate() == 1)
+				return true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch (SQLException e) {
-			System.out.println("SQLError in getEmployee" + e.toString());
-			return null;
-		}
-		return employees;
+		return false;
 	}
+	
+
 	
 	
 }
