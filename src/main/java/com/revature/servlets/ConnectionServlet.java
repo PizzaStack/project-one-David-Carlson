@@ -97,6 +97,7 @@ public class ConnectionServlet extends HttpServlet {
 	}
 	
 	public static void recreateDatabase() throws SQLException {
+		System.out.println("Starting recreateDatabase");
 		String[] dropStatements = { 
 				"drop table IF EXISTS reimbursement_items;",
 				"drop table IF EXISTS reimbursements;", 
@@ -107,23 +108,22 @@ public class ConnectionServlet extends HttpServlet {
 				+ "id serial primary key, "
 				+ "is_manager boolean not NULL, "
 				+ "username varchar(50) unique, "
-				+ "password varchar(50),"
-				+ "firstname varchar(50), "
-				+ "lastname varchar(50)); ",		
+				+ "password varchar(50) not NULL,"
+				+ "firstname varchar(50) not NULL, "
+				+ "lastname varchar(50) not NULL); ",		
 
 				"create table reimbursements (" 
 				+ "id serial primary key, " 
 				+ "user_id serial references employees(id), "
-				+ "state varchar(20),"
-				+ "primary key(id, user_i));",
+				+ "state varchar(20) not NULL, "
+				+ "resolved_by serial references employees(id));",
 				// Add byte array image
 				
 				"create table reimbursement_items (" 
 				+ "id serial primary key, " 
 				+ "req_id serial references reimbursements(id), "
 				+ "item_name varchar(50) not NULL,"
-				+ "item_price real not NULL,"
-				+ "primary key(id, req_id));"
+				+ "item_price real not NULL));",
 				};
 		try (Statement statement = connection.createStatement()) {
 			for (String drop : dropStatements) {
@@ -142,26 +142,26 @@ public class ConnectionServlet extends HttpServlet {
 	
 	public static void fillDatabase() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("fillDatabase not written");
-	}
-	
-    public ConnectionServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	}	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getContextPath();
 		System.out.println(path + " is connection Path");
-		switch(path) {
-		case "/recreate":
-			recreateDatabase();
-			break;
-		case "/fill":
-			fillDatabase();
-			break;
-		default:
-			System.out.println("Unrecognized connection path");
+		try {
+			switch(path) {
+			case "/recreate":
+				recreateDatabase();
+				break;
+			case "/fill":
+				fillDatabase();
+				break;
+			default:
+				System.out.println("Unrecognized connection path");
+			}
 		}
+		catch(SQLException e) {
+			System.out.println("Error doing " + path + " " + e.toString());
+		}		
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
