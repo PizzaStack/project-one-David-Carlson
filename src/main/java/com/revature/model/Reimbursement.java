@@ -2,6 +2,7 @@ package com.revature.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.dao.ReimbursementDao;
@@ -10,23 +11,39 @@ public class Reimbursement {
 	private int id;
 	private int user_id;
 	private String state;
-	private List<Item> items;
-	private Integer resolving_manager;
-	public enum States {
-		Pending,
-		Approved,
-		Denied
-	}
+	private String item_name;
+	private Double item_price;
+	private int resolved_by;
 	
+	public transient final static Reimbursement NOT_FOUND = new Reimbursement(-1, -1, "No state", "No item", -1.0d, 0);
+	public transient final static List<Reimbursement> Not_Found_List = new ArrayList<Reimbursement>();
+	
+	public static String Pending = "Pending";
+	public static String Approved = "Approved";
+	public static String Denied = "Denied";
+	
+	public Reimbursement(int id, int user_id, String state, String item_name, Double item_price, int resolved_by) {
+		super();
+		this.id = id;
+		this.user_id = user_id;
+		this.state = state;
+		this.item_name = item_name;
+		this.item_price = item_price;
+		this.resolved_by = resolved_by;
+	}
+	public Reimbursement(int user_id, String state, String item_name, Double item_price, int resolved_by) {
+		this(0, user_id, state, item_name, item_price, resolved_by);
+	}
+
 	public Reimbursement(ResultSet rs) throws SQLException {
 		id = rs.getInt("id");
 		user_id = rs.getInt("user_id");
 		state = rs.getString("state");		
-		items = ReimbursementDao.getReimbursementItems(id);
-		resolving_manager = rs.getInt("resolved_by");
-		if (rs.wasNull())
-			resolving_manager = null;
-	}	
+		item_name = rs.getString("item_name");
+		item_price = rs.getDouble("item_price");
+		resolved_by = rs.getInt("resolved_by");
+		resolved_by = resolved_by < 1? 0 : resolved_by;
+	}
 
 	public int getId() {
 		return id;
@@ -40,7 +57,19 @@ public class Reimbursement {
 		return state;
 	}
 
-	public List<Item> getItems() {
-		return items;
+	public String getItem_name() {
+		return item_name;
+	}
+
+	public Double getItem_price() {
+		return item_price;
+	}
+	public int getResolved_by() {
+		return resolved_by;
+	}
+	@Override
+	public String toString() {
+		return "Reimbursement [id=" + id + ", user_id=" + user_id + ", state=" + state + ", item_name=" + item_name
+				+ ", item_price=" + item_price + ", resolved_by=" + resolved_by + "]";
 	}
 }

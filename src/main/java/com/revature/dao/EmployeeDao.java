@@ -14,7 +14,7 @@ public class EmployeeDao {
 	public static List<Employee> getAllEmployees() {
 		List<Employee> employees = new ArrayList<Employee>();
 		Connection conn = ConnectionServlet.getConnection();
-		String sql = "select * from employees where is_manager is FALSE;";
+		String sql = "select * from employees where is_manager;;";
 		
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			try (ResultSet resultSet = statement.executeQuery()) {
@@ -25,13 +25,51 @@ public class EmployeeDao {
 		}
 		catch (SQLException e) {
 			System.out.println("SQLError in getEmployee" + e.toString());
-			return null;
+			return Employee.NOT_FOUND_LIST;
 		}
 		return employees;
 	}
-	public static Employee getEmployee(String username, String password) {
+	public static List<Employee> getAllManagers() {
+		List<Employee> employees = new ArrayList<Employee>();
+		Connection conn = ConnectionServlet.getConnection();
+		String sql = "select * from employees where is_manager;";
+		
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					employees.add(new Employee(resultSet));					
+				}			
+			}
+		}
+		catch (SQLException e) {
+			System.out.println("SQLError in getEmployee" + e.toString());
+			return Employee.NOT_FOUND_LIST;
+		}
+		return employees;
+	}
+	public static List<Employee> getAllPeople() {
+		List<Employee> employees = new ArrayList<Employee>();
+		Connection conn = ConnectionServlet.getConnection();
+		String sql = "select * from employees;";
+		
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					employees.add(new Employee(resultSet));					
+				}			
+			}
+		}
+		catch (SQLException e) {
+			System.out.println("SQLError in getEmployee" + e.toString());
+			return Employee.NOT_FOUND_LIST;
+		}
+		return employees;
+	}
+	
+	public static Employee getPerson(String username, String password) {
 		Connection conn = ConnectionServlet.getConnection();
 		String sql = "select * from employees where username=? AND password=?";
+		System.out.println(username + "-" + password);
 		
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, username);
@@ -41,18 +79,20 @@ public class EmployeeDao {
 					Employee employee =  new Employee(resultSet);
 					if (resultSet.next()) {
 						System.out.println("Multiple users with username/password");
-						return null;
+						return Employee.NOT_FOUND;
 					}
 					else 
 						return employee;
 				}					
-				else 
-					return null;
+				else {
+					System.out.println("Can't find");
+					return Employee.NOT_FOUND;
+				}					
 			}
 		}
 		catch (SQLException e) {
 			System.out.println("SQLError in getEmployee" + e.toString());
-			return null;
+			return Employee.NOT_FOUND;
 		}
 	}
 	

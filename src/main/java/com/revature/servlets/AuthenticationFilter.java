@@ -26,35 +26,38 @@ public class AuthenticationFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		System.out.println("Authentication started");
 		HttpServletRequest  req = (HttpServletRequest)  request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
 		String uri = req.getRequestURI();
 		System.out.println("Requested: " + uri);
-		HttpSession session = req.getSession(false);
-		if (session == null) {
-			if (uri.contains("session")) {
-				res.sendRedirect("index.html");
-				return;
-			}
-		}
-		else {
-			Employee employee = (Employee) session.getAttribute("Employee");
-			if (employee.getIsManager()) {
-				if (uri.contains("mPage")) {
-					
-				}
-			}
-			else {
-				
-			}
-		}
+		chain.doFilter(req, res);
 		
-		if ( false ) {
-			System.out.println("Unauthorized access");
-		}
-		else 
-			chain.doFilter(request, response);
+//		HttpSession session = req.getSession(false);
+//		if (session == null) {
+//			if (uri.contains("session")) {
+//				res.sendRedirect("index.html");
+//				return;
+//			}
+//		}
+//		else {
+//			Employee employee = (Employee) session.getAttribute("Employee");
+//			if (employee.getIsManager()) {
+//				if (uri.contains("mPage")) {
+//					
+//				}
+//			}
+//			else {
+//				
+//			}
+//		}
+//		
+//		if ( false ) {
+//			System.out.println("Unauthorized access");
+//		}
+//		else 
+//			chain.doFilter(request, response);
 		
 		
 	}

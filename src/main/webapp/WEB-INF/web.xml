@@ -18,7 +18,13 @@
     <location>/404.html</location>
   </error-page>
   <context-param>
-    <param-name>user</param-name>
-    <param-value>Padawan</param-value>
+  	<description>Used to ignore session permissions</description>
+    <param-name>NoSession</param-name>
+    <param-value>true</param-value>
+  </context-param>
+    <context-param>
+    <description>Used to turn off /databaseServlet</description>
+    <param-name>NoDatabase</param-name>
+    <param-value>false</param-value>
   </context-param>
 </web-app>

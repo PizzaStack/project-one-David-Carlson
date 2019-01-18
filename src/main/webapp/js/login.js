@@ -1,30 +1,38 @@
 "use strict";
+console.log("Login.js started");
 
-window.addEventListener("load", function () {
-    console.log("on load");
+function startLogin() {
+
     function sendData() {
         var XHR = new XMLHttpRequest();
 
         // Bind the FormData object and the form element
         var FD = new FormData(form);
+        alert(FD.toString());
         for (var p of FD)
-            console.log(p + " is there");
+            console.log(p.v + " is there");
+
 
         XHR.onreadystatechange = function(){
             switch (this.readyState){
                 case 4:
-                    if (this.status === 200)
-                        alert(this.responseText);
+                    if (this.status === 200) {
+
+                        alert("yay");s
+                    }
+
                     else if (this.status >= 400 || this.status < 500) {
-                        var alert = document.getElementById('password-warning');
-                        alert.classList.remove('d-none');
+                        alert("Login warning");
+                        var warning = document.getElementById('password-warning');
+                        warning.classList.remove('d-none');
                     }
                     break;
             }
         };
-
+        // Add the required HTTP header for form data POST requests
+        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         // Set up our request
-        XHR.open("POST", "Login");
+        XHR.open("POST", "http://localhost:8080/servlet-demo/login", false);
 
         // The data sent is what the user provided in the form
         XHR.send(FD);
@@ -39,4 +47,19 @@ window.addEventListener("load", function () {
         event.preventDefault();
         sendData();
     });
-});
+};
+
+addLoadEvent(startLogin);
+function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            if (oldonload) {
+                oldonload();
+            }
+            func();
+        }
+    }
+}

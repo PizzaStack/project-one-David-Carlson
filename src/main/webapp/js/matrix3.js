@@ -1,20 +1,22 @@
 "use strict";
-function start(canvas, color) {
+function startMatrixScroll() {
+    var canvas = document.getElementById("matrix-canvas");
+    var color = document.getElementsByTagName('body')[0].id;
     var refreshColor, textColor;
     switch(color) {        
         case 'red':
-        refreshColor = 'rgba(0, 0, 0, 0.05)';
-        textColor = '#822222';
-        break;
+            refreshColor = 'rgba(0, 0, 0, 0.05)';
+            textColor = '#822222';
+            break;
         case 'purple':
-        refreshColor = 'rgba(0, 0, 0, 0.05)';
-        textColor = '#451e3e';
-        break;
+            refreshColor = 'rgba(0, 0, 0, 0.05)';
+            textColor = '#451e3e';
+            break;
         default:
         case 'green':
-        refreshColor = 'rgba(0, 0, 0, 0.05)';
-        textColor = '#0F0';
-        break;        
+            refreshColor = 'rgba(0, 0, 0, 0.05)';
+            textColor = '#0F0';
+            break;
     }
 
     var s = window.screen;
@@ -27,7 +29,7 @@ function start(canvas, color) {
     var draw = function () {
         canvas.getContext('2d').fillStyle=refreshColor;
         canvas.getContext('2d').fillRect(0,0,width,height);
-        canvas.getContext('2d').fillStyle=textColor
+        canvas.getContext('2d').fillStyle=textColor;
         letters.map(function(y_pos, index){
             text = String.fromCharCode(3e4+Math.random()*33);
             x_pos = index * 10;
@@ -38,7 +40,18 @@ function start(canvas, color) {
     setInterval(draw, 40);
 }
 
-function onLoad(color='green') {
-    var canvas = document.getElementById("matrix-canvas");
-    start(canvas, color);
+// https://www.htmlgoodies.com/beyond/javascript/article.php/3724571/Using-Multiple-JavaScript-Onload-Functions.htm
+addLoadEvent(startMatrixScroll);
+function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            if (oldonload) {
+                oldonload();
+            }
+            func();
+        }
+    }
 }

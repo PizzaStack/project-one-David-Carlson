@@ -3,30 +3,34 @@ package com.revature.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.Path;
+
+import com.google.gson.Gson;
+import com.revature.model.Employee;
 
 @WebServlet(value="/hello")
 public class HelloServlet extends HttpServlet{
 //	
 	@Override 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath() + "\n");
-	  	PrintWriter output = response.getWriter();
-		String user = this.getInitParameter("user");
-		if(request.getParameter("name") != null)
-			user = request.getParameter("name");
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("currentUser", new String("Anakin"));
-		
-		output.write("GET " + user);
+		Employee employee = new Employee(0, true, "usery", "passsy", "firsty", "namey");
+		Employee employee2 = new Employee(1, false, "usery2", "passsy2", "firsty2", "namey2");
+		List<Employee> emps = new ArrayList<Employee>();
+		emps.add(employee); 
+		emps.add(employee2);
+		String empString = new Gson().toJson(emps);
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(empString);
+		out.flush();
 		
 //		response.sendRedirect("http://www.google.com");
 	}	

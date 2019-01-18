@@ -25,13 +25,14 @@ import javax.ws.rs.Path;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.Gson;
 import com.revature.dao.EmployeeDao;
+import com.revature.dao.ReimbursementDao;
 import com.revature.model.Employee;
+import com.revature.model.Reimbursement;
 
 
-
-//@WebServlet(value="/database", loadOnStartup=1)
-@WebServlet(name = "Database", urlPatterns = {"/database", "/database/recreate", "/database/fill", "/database/fill/*"}, loadOnStartup=1)
+@WebServlet(name = "Database", value = {"/database", "/database/recreate", "/database/fill", "/database/fill/*"}, loadOnStartup=1)
 public class ConnectionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -119,6 +120,7 @@ public class ConnectionServlet extends HttpServlet {
 	public static void recreateDatabase() throws SQLException {
 		System.out.println("Starting recreateDatabase");
 		String[] dropStatements = { 
+				"drop table IF EXISTS reimbursement_resolvers;",
 				"drop table IF EXISTS reimbursement_items;",
 				"drop table IF EXISTS reimbursements;", 
 				"drop table IF EXISTS employees;"};
@@ -136,14 +138,15 @@ public class ConnectionServlet extends HttpServlet {
 				+ "id serial primary key, " 
 				+ "user_id serial references employees(id), "
 				+ "state varchar(20) not NULL, "
-				+ "resolved_by serial references employees(id));",
-				// Add byte array image
-				
-				"create table reimbursement_items (" 
-				+ "id serial primary key, " 
-				+ "req_id serial references reimbursements(id), "
 				+ "item_name varchar(50) not NULL,"
-				+ "item_price real not NULL);",
+				+ "item_price real not NULL, "
+				+ "resolved_by int); ",
+				
+				"create table reimbursement_resolvers ("
+				+ "req_id serial references reimbursements(id), "
+				+ "user_id serial references employees(id));"
+				// Add byte array image
+		
 				};
 		try (Statement statement = connection.createStatement()) {
 			
@@ -171,8 +174,32 @@ public class ConnectionServlet extends HttpServlet {
 		}		
 	}
 	
-	public static void fillDatabase() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("fillDatabase not written");
+	public static void fillDatabase() {
+		Boolean[] are_managers = {true, true, false, false, false};
+		String[] usernames = {"manager1", "manager2", "emp1", "emp2", "emp3"};
+		String[] first     = {"Mehrab", "Ryan",   "Carlos", "Dante's", "Justice"};
+		String[] last     = {"Rahman", "Baldman",   "Rocks", "Inferno", "Batman"};
+		String password = "p";
+		
+		for(int i = 0; i < are_managers.length; i++) {
+			String name = usernames[i];
+			Employee emp = new Employee(are_managers[i], name, password, first[i], last[i]);
+			EmployeeDao.addEmployee(emp);
+		}
+		String p = Reimbursement.Pending;
+		String a = Reimbursement.Approved;
+		String d = Reimbursement.Denied;
+		int[] owner_ids = {3, 3, 3, 4};
+		String[] states = {p,a,d, a};
+		String[] items = {"Dog","Man", "Stuff", "Thing"};
+		Double[] prices = {1.0, 2.0, 3.0, 4.0};
+		int[] resolvers = {0, 2, 1, 2};
+		
+		for(int i = 0; i < owner_ids.length; i++) {
+			Reimbursement reim = new Reimbursement(owner_ids[i], states[i], items[i], prices[i], resolvers[i]);
+			ReimbursementDao.addReimbursement(reim);
+		}
+		
 	}	
 
 	@Override
@@ -205,40 +232,15 @@ public class ConnectionServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Conn doPost started");
-
-		String servletPath = request.getServletPath();
-		String extra = request.getPathInfo();
-		PrintWriter out = response.getWriter();
-		out.append("Served at: ").append(servletPath+extra);
-		
-		System.out.println(servletPath + " is servletPath");
-		System.out.println(extra + " is extra");
-		switch(servletPath + extra) {
-//		case "/database/recreate":
-//			recreateDatabase();
-//			out.append("no recreate");
-//			break;
-		case "/database/fill/employee":
-			addEmployee(request, response);
-			break;
-		default:
-			System.out.println("Unrecognized connection path");
-		}	
+		doGet(request, response);
 	}
 	
-	protected void addEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		Boolean is_manager = Boolean.parseBoolean(request.getParameter("is_manager"));
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		System.out.println(String.format("%s %s %s %s %s", is_manager, username, password, firstName, lastName));
-		Employee employee = new Employee(is_manager, username, password, firstName, lastName);
-		if (!EmployeeDao.addEmployee(employee))
-			System.out.println(employee.getUsername() + " wasn't added");
-		else				
-			response.getWriter().append("did fill " + employee.toString());
+	public static void writeToJson(HttpServletRequest request, HttpServletResponse response, Object javaToJson) throws ServletException, IOException {
+		String reqString = new Gson().toJson(javaToJson);
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(reqString);
+		out.flush();	
 	}
-
 }
