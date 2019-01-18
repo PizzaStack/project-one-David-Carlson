@@ -14,7 +14,7 @@ public class EmployeeDao {
 	public static List<Employee> getAllEmployees() {
 		List<Employee> employees = new ArrayList<Employee>();
 		Connection conn = ConnectionServlet.getConnection();
-		String sql = "select * from employees where is_manager;;";
+		String sql = "select * from employees where is_manager is false;";
 		
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			try (ResultSet resultSet = statement.executeQuery()) {

@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.revature.dao.EmployeeDao;
 import com.revature.model.Employee;
 
-@WebServlet(name="Employees", urlPatterns= {"/employees", "/employees/add"})
+@WebServlet(name="Personnel", urlPatterns= {"/personnel", "/personnel/employees", "/personnel/managers", "/personnel/add"})
 public class EmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -26,9 +26,14 @@ public class EmployeeServlet extends HttpServlet {
 		System.out.println(extra + " extra");
 		
 		switch(servletPath) {
-		case "/employees":
-			List<Employee> employees = EmployeeDao.getAllPeople();
-			ConnectionServlet.writeToJson(request, response, employees);
+		case "/personnel":
+			ConnectionServlet.writeToJson(request, response, EmployeeDao.getAllPeople());
+			return;		
+		case "/personnel/employees":
+			ConnectionServlet.writeToJson(request, response, EmployeeDao.getAllEmployees());
+			return;		
+		case "/personnel/managers":
+			ConnectionServlet.writeToJson(request, response, EmployeeDao.getAllManagers());
 			return;		
 		}
 	}	
@@ -40,7 +45,7 @@ public class EmployeeServlet extends HttpServlet {
 		System.out.println(servletPath + " servletPath");
 		System.out.println(extra + " extra");
 		switch(servletPath) {
-		case "/employees/add":
+		case "/personnel/add":
 			try {
 				Boolean is_manager = Boolean.parseBoolean(request.getParameter("is_manager"));
 				String username = request.getParameter("username");
