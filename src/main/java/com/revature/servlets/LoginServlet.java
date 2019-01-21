@@ -24,10 +24,7 @@ import com.revature.model.Employee;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-//	@Override
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//
-//	}
+
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,14 +45,16 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("pass " + password);
 		if (username == null || username == "" || password == null || password == "") {
 			System.out.println("Bad login info");
-			response.sendRedirect("templates/login.html");
+			response.sendRedirect("/templates/login.html");
+			return;
 			// Return response item
 		}
 		else {
 			Employee employee = EmployeeDao.getPerson(username, password);
-			if (employee == null) {
+			if (employee == Employee.NOT_FOUND) {
 				System.out.println("Employee doesn't exist");
-				response.sendRedirect("templates/login.html");
+				response.sendRedirect("/templates/login.html");
+				return;
 				// return response item (type and message)
 			}			
 			else {
@@ -63,7 +62,7 @@ public class LoginServlet extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("Employee", employee);
 				
-				String homePage = "templates/session/";
+				String homePage = "/templates/session/";
 				homePage += employee.getIsManager() ? "mPages/managerHome.html" : "ePages/employeeHome.html";
 				System.out.println("Redirecting to " + homePage);
 				response.sendRedirect(homePage);

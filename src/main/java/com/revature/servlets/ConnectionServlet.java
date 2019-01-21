@@ -198,8 +198,7 @@ public class ConnectionServlet extends HttpServlet {
 		for(int i = 0; i < owner_ids.length; i++) {
 			Reimbursement reim = new Reimbursement(owner_ids[i], states[i], items[i], prices[i], resolvers[i]);
 			ReimbursementDao.addReimbursement(reim);
-		}
-		
+		}		
 	}	
 
 	@Override

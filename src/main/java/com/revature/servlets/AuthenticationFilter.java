@@ -26,40 +26,61 @@ public class AuthenticationFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("Authentication started");
 		HttpServletRequest  req = (HttpServletRequest)  request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
 		String uri = req.getRequestURI();
-		System.out.println("Requested: " + uri);
-		chain.doFilter(req, res);
+		if (uri.endsWith("recreate") || uri.endsWith("fill")) {
+			chain.doFilter(req, res);
+			return;
+		}
 		
-//		HttpSession session = req.getSession(false);
-//		if (session == null) {
-//			if (uri.contains("session")) {
-//				res.sendRedirect("index.html");
+		HttpSession session = req.getSession(false);
+		if (session == null) {		
+			if (uri.contains("session") || uri.endsWith("reimbursements/me") || uri.endsWith("employees")) {
+				res.sendRedirect("/templates/login.html");
+				System.out.println("Authentication: Can't access session pages without session");
+				return;
+			}
+//			if (!(uri.equals("/") || uri.endsWith("login") || uri.endsWith("login.html") ||
+//					uri.endsWith("register") || uri.endsWith("index.html"))) {
+//				System.out.println(uri);
+//				System.out.println("Authentication: Not logged in, redirecting to home...");
+//				res.sendRedirect("templates/login.html");
 //				return;
 //			}
-//		}
-//		else {
-//			Employee employee = (Employee) session.getAttribute("Employee");
-//			if (employee.getIsManager()) {
-//				if (uri.contains("mPage")) {
-//					
-//				}
-//			}
-//			else {
-//				
-//			}
-//		}
-//		
-//		if ( false ) {
-//			System.out.println("Unauthorized access");
-//		}
-//		else 
-//			chain.doFilter(request, response);
-		
-		
+		}
+		else {
+			Object sessionData = session.getAttribute("Employee");
+			if (sessionData == null) {
+				res.sendRedirect("/templates/login.html");
+				return;
+			}
+			if (!(sessionData instanceof Employee)) {
+				res.sendRedirect("/templates/login.html");
+				return;
+			}
+			Employee employee = (Employee) sessionData;
+			
+			if (employee.getIsManager()) {
+				// TODO: Add employee gets, like reimbursements/me
+				if (uri.contains("ePages")) {
+					System.out.println("Authentication: Can't view as manager");
+					res.sendRedirect("/templates/session/mPages/managerHome.html");
+					return;
+				}
+			}
+			else {
+				// TODO: Add manager functions
+				if (uri.contains("mPages")) {
+					System.out.println("Authentication: Can't view as employee");
+					res.sendRedirect("/templates/session/mPages/employeeHome.html");
+					return;
+				}
+				
+			}			
+		}
+		chain.doFilter(req, res);	
 	}
 
 	@Override

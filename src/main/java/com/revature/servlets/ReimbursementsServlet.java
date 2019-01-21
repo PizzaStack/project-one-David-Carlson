@@ -47,7 +47,7 @@ public class ReimbursementsServlet extends HttpServlet {
 		}
 	}
 	protected void addReimbursement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Starting addReimbursement");
+		System.out.println("Reim: Starting addReimbursement");
 		String item_name = request.getParameter("item_name");
 		String item_price_str = request.getParameter("item_price");
 		HttpSession session = request.getSession(false);
@@ -60,7 +60,7 @@ public class ReimbursementsServlet extends HttpServlet {
 			Double item_price = Double.valueOf(item_price_str);
 			Reimbursement reim = new Reimbursement(me.getId(), Reimbursement.Pending, item_name, item_price, 0);
 			ReimbursementDao.addReimbursement(reim);
-			System.out.println("Added reimbursement: " + reim.toString());
+			System.out.println("Reim: Added reimbursement: " + reim.toString());
 		}
 		catch(Exception e) {
 			return;
@@ -68,13 +68,16 @@ public class ReimbursementsServlet extends HttpServlet {
 	}
 	
 	protected void getMyPendingAndResolvedRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Starting get Pending/resolved");
+		System.out.println("Reim: Starting get Pending/resolved");
 		HttpSession session = request.getSession(false);
-		if (session == null)
-			response.sendRedirect("templates/login.html");		
+		if (session == null) {
+			response.sendRedirect("/templates/login.html");	
+			return;
+		}
+				
 		Employee employee = (Employee) session.getAttribute("Employee");
 		if (employee == null)
-			response.sendRedirect("templates/login.html");
+			response.sendRedirect("/templates/login.html");
 		System.out.println(String.format("myId: %s", employee.getId()));
 		
 		List<Reimbursement> myPending = ReimbursementDao.getEmployeePendingReimbursements(employee.getId());
@@ -82,10 +85,10 @@ public class ReimbursementsServlet extends HttpServlet {
 		ReimbursementsBean myRequests = new ReimbursementsBean(myPending, ReimbursementDao.getResolversForReimbursements(myResolved));
 		// todo fix
 		ConnectionServlet.writeToJson(request, response, myRequests);
-		System.out.println("Got pending/resolved");
+		System.out.println("Reim: Got pending/resolved");
 	}
 	protected void getAllPendingAndResolvedRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Rest: Getting Pending/resolved");
+		System.out.println("Reim:: Getting Pending/resolved");
 		List<Reimbursement> allPending = ReimbursementDao.getAllPendingReimbursementsAsManager();
 		List<Reimbursement> allResolved = ReimbursementDao.getAllResolvedReimbursementsAsManager();
 		List<ResolvedPairBean> pairs = ReimbursementDao.getResolversForReimbursements(allResolved);
@@ -94,7 +97,7 @@ public class ReimbursementsServlet extends HttpServlet {
 		}
 		ReimbursementsBean myRequests = new ReimbursementsBean(allPending, pairs);
 		ConnectionServlet.writeToJson(request, response, myRequests);
-		System.out.println("Got pending/resolved");
+		System.out.println("Reim: Got pending/resolved");
 	}
 
 }
