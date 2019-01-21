@@ -54,12 +54,12 @@
                 <div class="card-body">
                     <h5 class="card-title">Create Reimbursement Request</h5>
                     <p class="card-text">
-                    <form action="reimbursement" method="POST">
+                    <form action="/reimbursements/add" method="POST">
                         <div class='form-group row'>
                             <label class='col-3 col-form-label mr-auto' for="item-name-input">Item Name:</label>
                             <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
                             <div class="col-9">
-                                <input type="text" class="form-control" id="item-name-input"
+                                <input name='item_name' type="text" class="form-control" id="item-name-input"
                                        aria-describedby="item-name-help">
                                 <small id="item-name-help" class="form-text text-muted">"The great Morpheus; we meet at
                                     last."
@@ -67,10 +67,10 @@
                             </div>
                         </div>
                         <div class='form-group row'>
-                            <label class='col-3 col-form-label' for="item-price-input">Password</label>
+                            <label class='col-3 col-form-label' for="item-price-input">Item Price</label>
                             <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
                             <div class="col-9">
-                                <input type="text" class="form-control" id="item-price-input"
+                                <input name='item_price' type="text" class="form-control" id="item-price-input"
                                        aria-describedby="item-price-help">
                                 <small id="item-price-help" class="form-text text-muted">"Cousin, protect the security of
                                     your shit."
@@ -147,6 +147,7 @@
         </div>
     </div>
 </div>
-<script type='text/javascript' src='/js/employeeHome.js' defer></script>
+<script type='text/javascript' src='/js/employeeHomeReimbursements.js' defer></script>
+
 </body>
 </html>

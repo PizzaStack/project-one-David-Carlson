@@ -19,7 +19,7 @@ import com.revature.dao.ReimbursementDao;
 import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 
-@WebServlet(name="Reimbursements", urlPatterns= {"/reimbursements/me", "/reimbursements"})
+@WebServlet(name="Reimbursements", urlPatterns= {"/reimbursements/me", "/reimbursements", "/reimbursements/add"})
 public class ReimbursementsServlet extends HttpServlet {
 	private static final long serialVersionUID = -5725324897120985096L;
 
@@ -36,6 +36,36 @@ public class ReimbursementsServlet extends HttpServlet {
 			break;
 		}
 	}	
+	@Override
+	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String servletPath = request.getServletPath();
+		switch(servletPath) {
+		case "/reimbursements/add":
+			addReimbursement(request, response);
+			response.sendRedirect("/templates/session/ePages/employeeHome.html");
+			break;
+		}
+	}
+	protected void addReimbursement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Starting addReimbursement");
+		String item_name = request.getParameter("item_name");
+		String item_price_str = request.getParameter("item_price");
+		HttpSession session = request.getSession(false);
+		if (item_name == null || item_price_str == null || session == null) 
+			return;
+		Employee me = (Employee) session.getAttribute("Employee");
+		if (me == null)
+			return;
+		try {
+			Double item_price = Double.valueOf(item_price_str);
+			Reimbursement reim = new Reimbursement(me.getId(), Reimbursement.Pending, item_name, item_price, 0);
+			ReimbursementDao.addReimbursement(reim);
+			System.out.println("Added reimbursement: " + reim.toString());
+		}
+		catch(Exception e) {
+			return;
+		}
+	}
 	
 	protected void getMyPendingAndResolvedRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Starting get Pending/resolved");
