@@ -1,17 +1,21 @@
 package com.revature.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
+import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.revature.beans.ReimbursementsBean;
 import com.revature.beans.ResolvedPairBean;
@@ -19,6 +23,7 @@ import com.revature.dao.ReimbursementDao;
 import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 
+@MultipartConfig
 @WebServlet(name="Reimbursements", urlPatterns= {"/reimbursements/me", "/reimbursements", "/reimbursements/add"})
 public class ReimbursementsServlet extends HttpServlet {
 	private static final long serialVersionUID = -5725324897120985096L;
@@ -50,7 +55,11 @@ public class ReimbursementsServlet extends HttpServlet {
 		System.out.println("Reim: Starting addReimbursement");
 		String item_name = request.getParameter("item_name");
 		String item_price_str = request.getParameter("item_price");
+		Part receiptPart = request.getPart("receipt-image");
+		InputStream initialStream = receiptPart.getInputStream();
+		byte[] receipt = ByteStreams.toByteArray(initialStream);
 		HttpSession session = request.getSession(false);
+		
 		if (item_name == null || item_price_str == null || session == null) 
 			return;
 		Employee me = (Employee) session.getAttribute("Employee");
@@ -58,7 +67,7 @@ public class ReimbursementsServlet extends HttpServlet {
 			return;
 		try {
 			Double item_price = Double.valueOf(item_price_str);
-			Reimbursement reim = new Reimbursement(me.getId(), Reimbursement.Pending, item_name, item_price, 0);
+			Reimbursement reim = new Reimbursement(me.getId(), Reimbursement.Pending, item_name, item_price, 0, receipt);
 			ReimbursementDao.addReimbursement(reim);
 			System.out.println("Reim: Added reimbursement: " + reim.toString());
 		}
@@ -88,7 +97,7 @@ public class ReimbursementsServlet extends HttpServlet {
 		System.out.println("Reim: Got pending/resolved");
 	}
 	protected void getAllPendingAndResolvedRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Reim:: Getting Pending/resolved");
+		System.out.println("Reim:: Getting all Pending/resolved");
 		List<Reimbursement> allPending = ReimbursementDao.getAllPendingReimbursementsAsManager();
 		List<Reimbursement> allResolved = ReimbursementDao.getAllResolvedReimbursementsAsManager();
 		List<ResolvedPairBean> pairs = ReimbursementDao.getResolversForReimbursements(allResolved);
@@ -97,7 +106,7 @@ public class ReimbursementsServlet extends HttpServlet {
 		}
 		ReimbursementsBean myRequests = new ReimbursementsBean(allPending, pairs);
 		ConnectionServlet.writeToJson(request, response, myRequests);
-		System.out.println("Reim: Got pending/resolved");
+		System.out.println("Reim: Got all pending/resolved");
 	}
 
 }

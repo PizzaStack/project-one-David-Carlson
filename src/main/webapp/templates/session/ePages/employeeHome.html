@@ -54,10 +54,9 @@
                 <div class="card-body">
                     <h5 class="card-title text-center">Create Reimbursement Request</h5>
                     <p class="card-text">
-                    <form action="/reimbursements/add" method="POST">
+                    <form enctype="multipart/form-data" action="/reimbursements/add" method="POST">
                         <div class='form-group row'>
                             <label class='col-3 col-form-label mr-auto' for="item-name-input">Item Name:</label>
-                            <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
                             <div class="col-9">
                                 <input name='item_name' type="text" class="form-control" id="item-name-input"
                                        aria-describedby="item-name-help">
@@ -68,13 +67,19 @@
                         </div>
                         <div class='form-group row'>
                             <label class='col-3 col-form-label' for="item-price-input">Item Price</label>
-                            <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="username-help" placeholder="Enter email"> -->
                             <div class="col-9">
                                 <input name='item_price' type="text" class="form-control" id="item-price-input"
                                        aria-describedby="item-price-help">
                                 <small id="item-price-help" class="form-text text-muted">"Cousin, protect the security of
                                     your shit."
                                 </small>
+                            </div>
+                        </div>
+                        <div class='file-field form-group row'>
+                            <label class='col-3 col-form-label' for="receipt-image-input">Receipt Image</label>
+                            <div class="col-9">
+                                <input name='receipt-image' type="file" accept='image/*' class="form-control" id="receipt-image-input"
+                                       aria-describedby="receipt-image-help">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit request</button>

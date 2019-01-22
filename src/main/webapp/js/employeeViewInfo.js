@@ -44,15 +44,14 @@ function startEmployeeHome() {
         resolvedBody.innerHTML = bodyHTML;
     }
 
-    function getReimbursements() {
+    function getEmployeeInfo() {
         var XHR = new XMLHttpRequest();
         XHR.responseType = 'json';
         XHR.onreadystatechange = function(){
             switch (this.readyState){
                 case 4:
                     if (this.status === 200) {
-                        fillPending(this.response.pendingReimbursements);
-                        fillResolved(this.response.resolvedReimbursements);
+                        fillInfoForm(this.response);
                     }
 
                     else if (this.status >= 400 || this.status < 500) {

@@ -1,10 +1,12 @@
 package com.revature.servlets;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -140,7 +142,8 @@ public class ConnectionServlet extends HttpServlet {
 				+ "state varchar(20) not NULL, "
 				+ "item_name varchar(50) not NULL,"
 				+ "item_price real not NULL, "
-				+ "resolved_by int); ",
+				+ "resolved_by int, "
+				+ "receipt_image BYTEA not NULL);",
 				
 				"create table reimbursement_resolvers ("
 				+ "req_id serial references reimbursements(id), "
@@ -174,7 +177,7 @@ public class ConnectionServlet extends HttpServlet {
 		}		
 	}
 	
-	public static void fillDatabase() {
+	public static void fillDatabase() throws IOException {
 		Boolean[] are_managers = {true, true, false, false, false};
 		String[] usernames = {"manager1", "manager2", "emp1", "emp2", "emp3"};
 		String[] first     = {"Mehrab", "Ryan",   "Carlos", "Dante's", "Justice"};
@@ -194,9 +197,11 @@ public class ConnectionServlet extends HttpServlet {
 		String[] items = {"Dog","Man", "Stuff", "Thing"};
 		Double[] prices = {1.0, 2.0, 3.0, 4.0};
 		int[] resolvers = {0, 2, 1, 2};
+		File file = new File("C:/Users/Owner/Desktop/Company/Revature/project-one/images/receipt1.jpg");
+		byte[] receipt_bytes = Files.readAllBytes(file.toPath());
 		
 		for(int i = 0; i < owner_ids.length; i++) {
-			Reimbursement reim = new Reimbursement(owner_ids[i], states[i], items[i], prices[i], resolvers[i]);
+			Reimbursement reim = new Reimbursement(owner_ids[i], states[i], items[i], prices[i], resolvers[i], receipt_bytes);
 			ReimbursementDao.addReimbursement(reim);
 		}		
 	}	

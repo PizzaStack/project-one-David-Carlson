@@ -14,15 +14,16 @@ public class Reimbursement {
 	private String item_name;
 	private Double item_price;
 	private int resolved_by;
+	private byte[] receipt_image;
 	
-	public transient final static Reimbursement NOT_FOUND = new Reimbursement(-1, -1, "No state", "No item", -1.0d, 0);
+	public transient final static Reimbursement NOT_FOUND = new Reimbursement(-1, -1, "No state", "No item", -1.0d, 0, null);
 	public transient final static List<Reimbursement> Not_Found_List = new ArrayList<Reimbursement>();
 	
 	public static String Pending = "Pending";
 	public static String Approved = "Approved";
 	public static String Denied = "Denied";
 	
-	public Reimbursement(int id, int user_id, String state, String item_name, Double item_price, int resolved_by) {
+	public Reimbursement(int id, int user_id, String state, String item_name, Double item_price, int resolved_by, byte[] receipt_image) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -30,9 +31,10 @@ public class Reimbursement {
 		this.item_name = item_name;
 		this.item_price = item_price;
 		this.resolved_by = resolved_by;
+		this.receipt_image = receipt_image;
 	}
-	public Reimbursement(int user_id, String state, String item_name, Double item_price, int resolved_by) {
-		this(0, user_id, state, item_name, item_price, resolved_by);
+	public Reimbursement(int user_id, String state, String item_name, Double item_price, int resolved_by, byte[] receipt_image) {
+		this(0, user_id, state, item_name, item_price, resolved_by, receipt_image);
 	}
 
 	public Reimbursement(ResultSet rs) throws SQLException {
@@ -43,8 +45,18 @@ public class Reimbursement {
 		item_price = rs.getDouble("item_price");
 		resolved_by = rs.getInt("resolved_by");
 		resolved_by = resolved_by < 1? 0 : resolved_by;
+		receipt_image = rs.getBytes("receipt_image");
 	}
 
+	public byte[] getReceipt_image() {
+		return receipt_image;
+	}
+	public static Reimbursement getNotFound() {
+		return NOT_FOUND;
+	}
+	public static List<Reimbursement> getNotFoundList() {
+		return Not_Found_List;
+	}
 	public int getId() {
 		return id;
 	}

@@ -1,3 +1,5 @@
+
+
 package com.revature.dao;
 
 import java.sql.Array;
@@ -23,7 +25,7 @@ public class ReimbursementDao {
 	public static Boolean addReimbursement(Reimbursement reim) {
 		Connection conn = ConnectionServlet.getConnection();
 		Boolean hasResolver = reim.getResolved_by() > 0;
-		String sql = "insert into reimbursements (user_id, state, item_name, item_price, resolved_by) values (?,?,?,?,?);";
+		String sql = "insert into reimbursements (user_id, state, item_name, item_price, resolved_by, receipt_image) values (?,?,?,?,?,?);";
 
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setInt(1, reim.getUser_id());
@@ -31,6 +33,7 @@ public class ReimbursementDao {
 			statement.setString(3, reim.getItem_name());
 			statement.setDouble(4, reim.getItem_price());
 			statement.setInt(5, reim.getResolved_by());
+			statement.setBytes(6, reim.getReceipt_image());
 	
 			if (statement.executeUpdate() == 1) 
 				return true;
