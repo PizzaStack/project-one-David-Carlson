@@ -37,9 +37,6 @@
                 <a class="nav-link" href="./viewEmployees.html">View Employees</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./viewEmployees.html">Resolved Requests</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
             </li>
         </ul>
@@ -65,24 +62,26 @@
         <div class="col-6 col-sm-12 mx-auto grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Pending Reimbursements</h5>
+                    <h5 id='pending-title' class="card-title">Pending Reimbursements</h5>
                     <p class="card-text">
-                    <table class="table table-dark">
+                    <table id='pending-table' class="table table-dark">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Item Name</th>
                             <th scope="col">Item Price</th>
+                            <th scope="col">Yea</th>
+                            <th scope="col">Nay</th>
+                            <th scope="col">Image</th>
                         </tr>
                         </thead>
 
                         <tbody id='pending-tbody'>
-                        <tr id='first-pending'>
-                            <th scope="row">2</th>
-                            <td>Corn Dog</td>
-                            <td>Thornton</td>
-                        </tr>
-
+                        <!--<tr id='first-pending'>-->
+                            <!--<th scope="row">2</th>-->
+                            <!--<td>Corn Dog</td>-->
+                            <!--<td>Thornton</td>-->
+                        <!--</tr>-->
                         </tbody>
                     </table>
                     </p>
@@ -93,9 +92,9 @@
         <div class="col-6 col-sm-12 mx-auto grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Resolved Reimbursements</h5>
+                    <h5 id='resolved-title' class="card-title">Resolved Reimbursements</h5>
                     <p class="card-text">
-                    <table class="table table-dark">
+                    <table id='resolved-table' class="table table-dark">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -107,13 +106,13 @@
                         </thead>
 
                         <tbody id='resolved-tbody'>
-                        <tr id='first-resolved'>
-                            <th scope="row">2</th>
-                            <td>Corn Dog</td>
-                            <td>Thornton</td>
-                            <td>Approved</td>
-                            <td>Carlson, David</td>
-                        </tr>
+                        <!--<tr id='first-resolved'>-->
+                            <!--<th scope="row">2</th>-->
+                            <!--<td>Corn Dog</td>-->
+                            <!--<td>Thornton</td>-->
+                            <!--<td>Approved</td>-->
+                            <!--<td>Carlson, David</td>-->
+                        <!--</tr>-->
                         </tbody>
                     </table>
                     </p>

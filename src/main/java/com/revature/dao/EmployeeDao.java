@@ -98,7 +98,7 @@ public class EmployeeDao {
 	
 	public static Boolean updateEmployee(Employee employee) {
 		Connection conn = ConnectionServlet.getConnection();
-		String sql = "update employees set username=? and password=? and firstname=? and lastname=? where id=?";
+		String sql = "update employees set username=?, password=?, firstname=?, lastname=? where id=?";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, employee.getUsername());
 			statement.setString(2, employee.getPassword());

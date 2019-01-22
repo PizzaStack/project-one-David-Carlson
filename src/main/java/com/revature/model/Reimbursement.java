@@ -1,21 +1,26 @@
 package com.revature.model;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.revature.dao.ReimbursementDao;
 
-public class Reimbursement {
+public class Reimbursement implements Serializable {
+	private static final long serialVersionUID = 3508439216783869368L;
 	private int id;
 	private int user_id;
 	private String state;
 	private String item_name;
 	private Double item_price;
+//	https://stackoverflow.com/questions/48399176/how-to-deserialize-base64-encoded-json-data-with-gson
+//	@JsonAdapter(Base64TypeAdapterFactory.class)
 	private int resolved_by;
-	private byte[] receipt_image;
 	
+	private transient byte[] receipt_image;	
 	public transient final static Reimbursement NOT_FOUND = new Reimbursement(-1, -1, "No state", "No item", -1.0d, 0, null);
 	public transient final static List<Reimbursement> Not_Found_List = new ArrayList<Reimbursement>();
 	

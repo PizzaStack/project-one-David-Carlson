@@ -28,7 +28,7 @@ function startMatrixScroll() {
 
     var draw = function () {
         canvas.getContext('2d').fillStyle=refreshColor;
-        canvas.getContext('2d').fillRect(0,0,width,height);
+        canvas.getContext('2d').fillRect(0,0,width, 4000);
         canvas.getContext('2d').fillStyle=textColor;
         letters.map(function(y_pos, index){
             text = String.fromCharCode(3e4+Math.random()*33);

@@ -147,17 +147,18 @@ public class ReimbursementDao {
 		return reimbursements;
 	}
 	
-	public static Boolean resolveReimbursement(int req_id, String new_state) {
+	public static Boolean resolveReimbursement(int req_id, String new_state, int manager_id) {
 		if (!new_state.equals(Reimbursement.Approved) && !new_state.equals(Reimbursement.Denied)) {
 			System.out.println("Given invalid resolved state: " + new_state);
 			return false;
 		}
 		Connection conn = ConnectionServlet.getConnection();
-		String sql = "update reimbursements set state=? where id=? and state=?;";
+		String sql = "update reimbursements set state=?, resolved_by=? where id=? and state=?;";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, new_state);
-			statement.setInt(2, req_id);
-			statement.setString(3, Reimbursement.Pending);
+			statement.setInt(2, manager_id);
+			statement.setInt(3, req_id);
+			statement.setString(4, Reimbursement.Pending);
 			if (statement.executeUpdate() == 1)
 				return true;
 		} catch (SQLException e) {

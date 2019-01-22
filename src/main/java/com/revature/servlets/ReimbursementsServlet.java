@@ -24,15 +24,19 @@ import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 
 @MultipartConfig
-@WebServlet(name="Reimbursements", urlPatterns= {"/reimbursements/me", "/reimbursements", "/reimbursements/add"})
+@WebServlet(name="Reimbursements", urlPatterns= {"/reimbursements/me", "/reimbursements", "/reimbursements/add", "/reimbursements/resolve"})
 public class ReimbursementsServlet extends HttpServlet {
 	private static final long serialVersionUID = -5725324897120985096L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Reim: Starting reim doPost");
 		String servletPath = request.getServletPath();
-		System.out.println("Reim servlet path " + servletPath);
 		switch(servletPath) {
+		case "/reimbursements/add":
+			addReimbursement(request, response);
+			response.sendRedirect("/templates/session/ePages/employeeHome.html");
+			break;
 		case "/reimbursements/me":
 			getMyPendingAndResolvedRequests(request, response);			
 			break;
@@ -40,15 +44,26 @@ public class ReimbursementsServlet extends HttpServlet {
 			getAllPendingAndResolvedRequests(request, response);
 			break;
 		}
-	}	
+	}
 	@Override
-	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Reim: Starting reim doGet");
 		String servletPath = request.getServletPath();
+//		System.out.println(servletPath);
 		switch(servletPath) {
-		case "/reimbursements/add":
-			addReimbursement(request, response);
-			response.sendRedirect("/templates/session/ePages/employeeHome.html");
-			break;
+		case "/reimbursements/resolve":
+			System.out.println("Reim: Starting resolve reim");
+			String resolution = request.getParameter("resolution");
+			String id = request.getParameter("id");
+			HttpSession session = request.getSession();
+			if (resolution != null && (resolution.equals(Reimbursement.Approved) || resolution.equals(Reimbursement.Denied)) 
+					&& id != null && session != null) {
+				Employee manager = (Employee) session.getAttribute("Employee");
+				if (ReimbursementDao.resolveReimbursement(Integer.valueOf(id), resolution, manager.getId())) {
+					System.out.println("Reim: Success w/resolving reim");
+				}
+			}
+			response.sendRedirect("/templates/session/mPages/managerHome.html");
 		}
 	}
 	protected void addReimbursement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
